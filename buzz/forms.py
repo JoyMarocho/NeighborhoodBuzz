@@ -23,3 +23,8 @@ class ExistingUserChangeForm(UserChangeForm):
     class Meta:
         model = User
         fields = ('email',)
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('image','user','bio','location')
