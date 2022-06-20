@@ -104,3 +104,10 @@ class Profile(models.Model):
         def delete_profile(self):
             self.delete()
 
+class Neighborhood(models.Model):
+        name = models.CharField(max_length=80, blank=True)
+        location = models.CharField(max_length=80, blank=True)
+        population = models.IntegerField(blank=True)
+
+        def __str__(self):
+            return self.name
