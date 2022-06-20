@@ -13,7 +13,7 @@ django-fontawesome==1.0
 django-registration-redux==2.10
 django-tinymce==3.4.0
 djangorestframework==3.13.1
-fontawesome-free==5.15.4 
+fontawesomefree==5.15.4 
 gunicorn==20.1.0
 importlib-metadata==4.11.4
 makefile==1.1.0

@@ -2,12 +2,12 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-from dotenv import read_dotenv
+# from dotenv import read_dotenv
 
 
 def main():
-    """Activate dotenv entries"""
-    read_dotenv(override=True)
+    # """Activate dotenv entries"""
+    # read_dotenv(override=True)
 
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'neighborhood.settings')
