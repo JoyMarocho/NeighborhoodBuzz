@@ -87,3 +87,20 @@ class User(AbstractBaseUser,PermissionsMixin):
     # @property
     # def is_superuser(self):
     #   return self.is_superuser 
+
+class Profile(models.Model):
+        user = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=True)
+        bio = models.TextField(max_length=200, blank=True)
+        image = CloudinaryField('image', blank=True)
+        location = models.CharField(max_length=80, blank=True)
+        date_joined = models.DateTimeField(default=timezone.now)
+
+        def __str__(self):
+            return str(self.user.username)
+
+        def save_profile(self):
+            self.save()
+
+        def delete_profile(self):
+            self.delete()
+
