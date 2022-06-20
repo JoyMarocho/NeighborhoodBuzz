@@ -54,3 +54,36 @@ def create_superuser(self,email,password=None,**extra_fields):
             #   raise ValueError('Superuser must have superuser=True.')
         return self.create_user(email, password, **extra_fields)
 
+class User(AbstractBaseUser,PermissionsMixin):
+        identification_number = models.IntegerField(default=1)
+        email = models.EmailField(verbose_name='email address', unique=True)
+        neighborhood = models.ForeignKey('Neighborhood', on_delete=models.CASCADE, null=True, blank=True)
+        
+        is_active = models.BooleanField(default=True)
+        is_staff = models.BooleanField(default=False)
+        is_superuser = models.BooleanField(default=False)
+
+        USERNAME_FIELD = 'email'
+        REQUIRED_FIELDS = []
+
+        objects = UserManager()
+
+        def __str__(self):
+            return self.email
+
+        def get_full_name(self):
+            return self.email
+
+        def get_username(self):
+            return self.email
+
+        def has_perm(self,perm,obj=None):
+            return True
+
+    # @property
+    # def is_staff(self):
+    #   return self.is_staff
+
+    # @property
+    # def is_superuser(self):
+    #   return self.is_superuser 
