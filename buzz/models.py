@@ -112,3 +112,11 @@ class Neighborhood(models.Model):
         def __str__(self):
             return self.name
 
+class Business(models.Model):
+        name = models.CharField(max_length=100, blank=True)
+        email_address = models.EmailField()
+        user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE, blank=True)
+        neighborhood = models.ForeignKey('Neighborhood',on_delete=models.CASCADE, blank=True)
+
+        def __str__(self):
+            return self.name
