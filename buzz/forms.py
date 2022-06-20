@@ -18,3 +18,8 @@ class NewUserForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+class ExistingUserChangeForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = ('email',)
