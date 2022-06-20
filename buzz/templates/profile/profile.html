@@ -1,0 +1,27 @@
+{% extends 'profile/base.html' %} 
+
+{% block title %}Profile Page{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <h2 class="text-center">Here's your profile page {{profile.username}}</h2>
+    <div class="row my-3 p-3">
+        <img height="200px" width="10%" class="rounded-circle account-img" src="{{ user.profile.image }} " style="cursor: pointer;"/>
+    </div>
+    <ul>
+        <li>Location: {{profile.profile.location}}</li>
+        <li>Bio: {{profile.profile.bio}}</li>
+    </ul>
+    </div>
+
+    <div class="container">
+    <div class="row">
+        <div class="col-md-4">
+        <a class="btn btn-primary btn-lg" role="button" aria-current="page" href="{% url 'updateprofile' %}">Update Profile</a>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
