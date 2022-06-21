@@ -3,25 +3,38 @@
 {% block title %}Profile Page{% endblock title %}
 
 {% block content %}
-
-<div class="container">
-    <h2 class="text-center">Here's your profile page {{profile.username}}</h2>
-    <div class="row my-3 p-3">
-        <img height="200px" width="10%" class="rounded-circle account-img" src="{{ user.profile.image }} " style="cursor: pointer;"/>
+<main>
+    <section>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6 mb-5 text-center">
+                    {% if user.profile %}
+                    <hr>
+                    <h2 class="text-center">Here's your profile page {{profile.username}}</h2>
+            <div class="row my-3 p-3">
+                            <img src="{{request.user.profile.profile_pic.url}}" class="img-fluid mb-2" alt=""
+                            style="max-width:140px;height:140px; border-radius:50%;">
+                {% comment %} <img height="200px" width="10%" class="rounded-circle account-img" src="{{ user.profile.image }} " style="cursor: pointer;"/> {% endcomment %}
     </div>
-    <ul>
-        <li>Location: {{profile.profile.location}}</li>
-        <li>Bio: {{profile.profile.bio}}</li>
-    </ul>
+    
+        <p><span><strong> Location </strong></span>: {{profile.profile.location}}</p>
+        <p><span><strong> Bio </strong></span>:{{profile.profile.bio}}</p>
+    
     </div>
-
+    {%else %}
     <div class="container">
     <div class="row">
         <div class="col-md-4">
         <a class="btn btn-primary btn-lg" role="button" aria-current="page" href="{% url 'updateprofile' %}">Update Profile</a>
+            </div>
         </div>
     </div>
-</div>
+    <hr>
+    {% endif %}
 
 
+    </div>
+    </div>
+    </section>
+    </main>
 {% endblock %}
