@@ -13,6 +13,7 @@ import os
 from os import environ
 from pathlib import Path
 import dj_database_url as db_url
+from decouple import config,Csv
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
@@ -33,6 +34,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Email configurations remember to install python-decouple
+EMAIL_USE_TLS = config('EMAIL_USE_TLS')
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = 'Astrid1*'
 
 # Application definition
 
@@ -43,12 +51,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'buzz.apps.BuzzConfig',
     'cloudinary',
     'bootstrap5',
     'crispy_forms',
     'crispy_bootstrap5',
     'fontawesome_5',
+    'tinymce',
+    'rest_framework',
+    'rest_framework.authtoken',
+
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -67,6 +80,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
+
 ROOT_URLCONF = 'neighborhood.urls'
 
 TEMPLATES = [
@@ -80,6 +99,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
+
             ],
         },
     },
@@ -101,7 +122,6 @@ DATABASES = {
 }
 
 # cloudinary configurations
-
 cloudinary.config( 
     cloud_name = 'marocho',
     api_key = '188969527952778', 

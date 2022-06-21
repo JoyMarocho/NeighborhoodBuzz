@@ -10,6 +10,9 @@ urlpatterns = [
     url(r'logout', views.logout_user, name='logout'),
     url(r'profile/', views.profile, name='profile'),
     url(r'updateprofile', views.update_profile, name='updateprofile'),
+    url('search/',views.search_results,name='search'),
+    url('businesses/<int:neighborhood_id>/', views.businesses, name='businesses'),
+    url('neighborhoods/', views.neighborhood, name='neighborhood'),
 ]
 
 if settings.DEBUG:

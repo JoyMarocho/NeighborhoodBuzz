@@ -92,7 +92,7 @@ class User(AbstractBaseUser,PermissionsMixin):
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=True)
     bio = models.TextField(max_length=200, blank=True)
-    image = CloudinaryField('image', blank=True)
+    image = CloudinaryField('image',default='https://res.cloudinary.com/marocho/image/upload/v1654523291/cld-sample-3.jpg')
     location = models.CharField(max_length=80, blank=True)
     date_joined = models.DateTimeField(default=timezone.now)
 
@@ -107,9 +107,39 @@ class Profile(models.Model):
 
 
 class Neighborhood(models.Model):
-    name = models.CharField(max_length=80, blank=True)
-    location = models.CharField(max_length=80, blank=True)
+    name = models.CharField(max_length=255, blank=True)
+    location = models.CharField(max_length=255, blank=True)
     population = models.IntegerField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+    def create_neighborhood(self):
+        self.save()
+
+    def delete_neighborhood(self):
+        self.delete()
+
+    @classmethod
+    def find_neighborhood(cls, search_term):
+        results = cls.objects.filter(name__icontains=search_term)
+        return results
+
+    def update_neighborhood(self, name, location, population):
+        self.name = name
+        self.location = location
+        self.population = population
+        self.save()
+
+    def get_population(self):
+        return self.population
+
+    def update_population(self, population):
+        self.population = population
+        self.save()
+
+    def get_neighborhoods(self):
+        return Neighborhood.objects.all()
+    
 
     def __str__(self):
         return self.name
@@ -120,6 +150,26 @@ class Business(models.Model):
     email_address = models.EmailField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE, blank=True)
     neighborhood = models.ForeignKey('Neighborhood',on_delete=models.CASCADE, blank=True)
+    dated = models.DateTimeField(auto_now_add=True)
+    description = models.TextField(max_length=1000)
+
+    def create_business(self):
+        self.save()
+
+    def delete_business(self, business_name, business_email):
+        self.name = business_name
+        self.email = business_email
+        self.delete()
+
+    def update_business(self, business_name, business_email):
+        self.name = business_name
+        self.email = business_email
+        self.save()
+
+    @classmethod
+    def find_business(cls, search_term):
+        businesses = cls.objects.filter(name__icontains=search_term)
+        return businesses
 
     def __str__(self):
         return self.name
@@ -129,10 +179,18 @@ class Post(models.Model):
     title = models.CharField(max_length=70, blank=True)
     description = models.CharField(max_length=500, blank=True)
     content = models.TextField(blank=True)
-    image = CloudinaryField('image', blank=True)
+    image = CloudinaryField('image',null=True, blank=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE, blank=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+
 
     def __str__(self):
         return self.title
 
+    class Meta:
+        ordering = ('-created_on',)
 
+    @classmethod
+    def search_post(cls, search_term):
+        results = cls.objects.filter(name__icontains=search_term)
+        return results

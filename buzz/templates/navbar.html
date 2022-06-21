@@ -13,6 +13,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
+            <a class="py-2 d-block btn d-md-inline-block" href="{% url 'businesses' user.profile.neighborhood.id %}">Businesses</a>
 
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
@@ -51,7 +52,6 @@
                 </li>
                 {% endif %}
             </ul>
-
             </div>
         </div>
         </nav>

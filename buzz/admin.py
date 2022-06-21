@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Profile,User,Neighborhood,Business
+from .models import Profile,User,Neighborhood,Business,Post
 from .forms import NewUserForm,ExistingUserChangeForm
 #from django.contrib.auth import get_user_model
 
@@ -22,5 +22,6 @@ class UserAdmin(UserAdmin):
 
 admin.site.register(User,UserAdmin)
 admin.site.register(Profile)
+admin.site.register(Post)
 admin.site.register(Neighborhood)
 admin.site.register(Business)

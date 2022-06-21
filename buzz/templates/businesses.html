@@ -1,0 +1,57 @@
+{% extends "registration/base.html"  %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% include 'navbar.html' %}
+<div class="container">
+    <!-- <p class="text-center">
+        <h3>All Businesses In {{neighborhood_name}}</h3>
+    </p> -->
+    <div class="new-hood" id="post-btn">
+        <a href="" class="btn btn-dark btn-sm">
+            <i class="fa-solid fa-plus "></i> Add Business
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 col-lg-4 col-sm-12"></div>
+        <div class="col-md-4 col-lg-4 col-sm-12">
+            <div class="new-post m-3 card bg-white p-3" style="display:none;">
+                <!-- Adding a neighborhood -->
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{form |crispy}}
+                    <input type="submit" class="btn btn-dark btn-sm m-3" id="newpost" value="Add">
+                </form>
+
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-4 col-sm-12"></div>
+    </div>
+</div>
+<main class="container">
+    <div class="business-box d-flex flex-wrap">
+        {% for business in businesses %}
+        {% if business.neighborhood.name == 'Chester Court' %}
+        {% endif %}
+        <div class="card mb-4 m-3" style="width:300px; border-radius:10px;">
+            <div class="card-body">
+                <h5 class="card-title">{{ business.name }}</h5>
+                <p class="card-text">{{ business.description }}</p>
+                <a href="" class="">{{ business.email }}</a> <br>
+
+                <div>
+                    <p>{{business.neighborhood.name}}</p>
+                </div>
+
+                <a href="" class="btn btn-dark btn-sm">
+                    <i class="fa fa-info-circle"></i>
+                    More Info
+                </a>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+    {% endblock %}
+</main>

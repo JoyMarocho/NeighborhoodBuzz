@@ -6,9 +6,10 @@ from django.contrib.auth import login,authenticate,logout
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
-
-from .models import Profile,User
-from .forms import NewUserForm,ProfileForm,ExistingUserChangeForm
+from itertools import chain
+from .models import Neighborhood, User, Profile, Business, Post
+from .forms import NewUserForm,ProfileForm,ExistingUserChangeForm,NeighborhoodForm,BusinessForm
+from .email import send_welcome_email
 
 
 
@@ -56,15 +57,24 @@ def logout_user(request):
     messages.info(request, 'You have successfully logged out.')
     return redirect('login')
 
-@login_required
-def profile(request):
+@login_required(login_url='/accounts/login/')
+def profile(request, username):
     #username = request.data['username']
     # profile = get_object_or_404(User,pk=pk)
     # profile.save()
-    return render(request,'profile/profile.html',)
+    user = get_object_or_404(User, username=username)
+    
+    context = {
+        'user': user,
 
-@login_required
-def update_profile(request):
+    }
+    return render(request,'profile/profile.html', context)
+
+@login_required(login_url='/accounts/login/')
+def update_profile(request, username):
+    user = get_object_or_404(User, username=username)
+
+
     if request.method == 'POST':
         user_form = ExistingUserChangeForm(request.POST, instance=request.user)
         profile_form = ProfileForm(request.POST, instance=request.user.profile)
@@ -80,3 +90,68 @@ def update_profile(request):
         profile_form = ProfileForm(instance=request.user.profile)
     return render(request,'profile/update_profile.html',{"user_form": user_form, "profile_form":profile_form})
 
+@login_required(login_url='/accounts/login/')
+def search_results(request):
+    if 'query' in request.GET and request.GET['query']:
+        search_term = request.GET.get('query')
+        # searched_query = Neighborhood.find_neighborhood(search_term)
+        searched_business = Business.objects.filter(name__icontains=search_term)
+        searched_post = Post.objects.filter(post__icontains=search_term)
+        
+        message = f"{search_term, searched_business, searched_post}"
+        
+        results = chain(searched_business, searched_post)
+        
+        params = {
+            'message': message,
+            'results': results,
+            'businesses': searched_business,
+            'posts': searched_post,
+        }
+        
+        return render(request, 'search/search.html', params)
+    else:
+        message = "You haven't searched for any term"
+        return render(request, 'search/search.html', {"message": message})
+
+@login_required(login_url='/accounts/login/')               
+def neighborhood(request):
+    neighborhoods = Neighborhood.objects.all()
+    if request.method == 'POST':
+        form = NeighborhoodForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('neighborhood')
+        
+    else:
+        form = NeighborhoodForm()
+    
+    params = {
+        'neighborhoods': neighborhoods,
+        'form': form,
+    }
+    return render(request, 'hood.html', params)
+
+
+
+@login_required(login_url='/accounts/login/')
+def businesses(request, neighborhood_id):
+    # neighborhood_name = Neighborhood.objects.get(id=neighborhood_id)
+    neighborhood = get_object_or_404(Neighborhood, pk=neighborhood_id)
+    businesses = Business.objects.filter(neighborhood=neighborhood)
+    
+    if request.method == 'POST':
+        form = BusinessForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('businesses', neighborhood.id)
+        
+    else:
+        form = BusinessForm()
+    
+    params = {
+        'businesses': businesses,
+        'form': form,
+        # 'neighborhood_name': neighborhood_name,
+    }
+    return render(request, 'businesses.html', params)

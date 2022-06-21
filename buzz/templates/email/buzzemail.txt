@@ -1,0 +1,5 @@
+Hello {{name}}
+
+Welcome to the Neighbourhood Buzz newsletter. You will find the most exciting updates about your area code.
+
+Bigbaby
